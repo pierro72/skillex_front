@@ -1,0 +1,45 @@
+<div *ngIf= "view=='box'; then  templateBox"> </div>
+
+<ng-template #templateBox>
+    <div class="box box-primary">
+        <div *ngIf="branche">
+            <div class="box-header">
+                <i class="fa fa-code-fork text-blue"></i> <h3 class="box-title"> {{'branche' | translate}} <small> {{branche.libelle}} </small> </h3>
+            </div>
+            <div class="box-body pad table-responsive fiche" *ngIf="branche.id">
+                <div *ngIf="branche; then templateContent"> </div>
+            </div>
+            <div class="box-footer" *ngIf="branche.id">
+                <div *ngIf= "branche; then  templateAction"> </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #templateContent>
+    <strong> <i class="fa fa-map-marker margin-r-5"></i>    Nom         </strong>   <p class="text-muted">{{branche.nom}}</p>
+    <strong> <i class="fa fa-tag margin-r-5"></i>           Libelle     </strong>   <p class="text-muted">{{branche.libelle}}</p>
+    <strong> <i class="fa fa-commenting margin-r-5"></i>    Description </strong>   <p class="text-muted">{{branche.description}}</p>
+</ng-template>
+
+
+<ng-template #templateAction>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary">Action</button>
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li ><a (click)= "openEditModal()" > <span class="fa fa-pencil"> </span> {{'editer' | translate}} </a> </li>
+            <li ><a (click)= "openDeleteModal()"> <i class="fa fa-trash-o"> </i> {{'supprimer' | translate}} </a> </li>
+            <li class="divider"></li>
+            <li ><a (click)= "openCreateModal()" > <span class="fa fa-plus"> </span> {{'ajouter.branche.2' | translate }}  </a> </li>
+            <li ><a (click)= "openCreateCompetenceModal()" > <span class="fa fa-plus"> </span>{{'ajouter.competence' | translate }} </a> </li>
+        </ul>
+    </div>
+
+</ng-template>
+
+<ng-template #loading>Loading </ng-template>

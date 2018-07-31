@@ -1,0 +1,114 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Rx';
+import { SERVER_API_URL, SERVER_IHNI_URL } from '../../app.constants';
+import { tokenNotExpired} from 'angular2-jwt/angular2-jwt';
+import { IhniAccount } from '../.';
+import { createRequestOption } from '../../shared';
+import { HttpHeaders } from '@angular/common/http';
+
+
+@Injectable()
+export class AuthService  {
+
+    private ihniUrl = SERVER_IHNI_URL;
+
+    constructor( private http: HttpClient ) { }
+
+
+
+/*    getToken() {
+        return localStorage.getItem('authenticationToken') || sessionStorage.getItem('authenticationToken');
+    }*/
+
+/*    public isIhniAuthenticated(): boolean {
+        if ( sessionStorage.getItem('ihniAccount')) {
+            return true;
+        } else {
+            return false;
+        }
+    }*/
+
+/*    public getIhniAccount(): Observable<IhniAccount>  {
+        return Observable.of( JSON.parse(sessionStorage.getItem('ihniAccount')));
+    }*/
+
+    // public loginIhni(user): IhniAccount {
+    //     const ihniAccount = new IhniAccount(
+    //         user.apiKey,
+    //         user.user,
+    //         user.id_user,
+    //         user.admin,
+    //         user.team,
+    //         user.id_team,
+    //         user.role,
+    //         user.appName,
+    //     );
+    //     sessionStorage.setItem('ihniAccount', JSON.stringify(ihniAccount));
+    //     console.log('enregistrement du compte ' + user.id_user + ' en session');
+    //     return ihniAccount;
+    // }
+
+/*    public isAuthenticated(): boolean {
+        const token = this.getToken();
+        return tokenNotExpired(token);
+    }*/
+
+/*     loginAdmin(): Observable<any> {
+        const data = {
+            username: 'admin',
+            password: 'admin',
+            rememberMe: true
+        };
+        const headers = new HttpHeaders();
+        return this.http.post(SERVER_API_URL + 'api/authenticate', data, { headers, withCredentials: true }).map(authenticateSuccess.bind(this));
+        function authenticateSuccess(resp) {
+            console.log(resp);
+            const jwt = resp.id_token;
+            this.storeAuthenticationToken(jwt, true);
+            return jwt;
+        }
+    } */
+
+/*    loginAdmin(): Observable<any> {
+        const data = {
+            username: 'admin',
+            password: 'admin',
+            rememberMe: true
+        };
+        const headers = new HttpHeaders();
+        return this.http.post(SERVER_API_URL + 'api/authenticate', data).map(authenticateSuccess.bind(this));
+        function authenticateSuccess(resp) {
+            console.log(resp);
+            const jwt = resp.id_token;
+            this.storeAuthenticationToken(jwt, true);
+            return jwt;
+        }
+    }*/
+
+/*    loginWithToken(jwt, rememberMe) {
+        if (jwt) {
+            this.storeAuthenticationToken(jwt, rememberMe);
+            return Promise.resolve(jwt);
+        } else {
+            return Promise.reject('auth-jwt-service Promise reject'); // Put appropriate error message here
+        }
+    }*/
+
+/*    storeAuthenticationToken(jwt, rememberMe) {
+        if (rememberMe) {
+            localStorage.setItem('authenticationToken', jwt);
+        } else {
+            sessionStorage.setItem('authenticationToken', jwt);
+        }
+    }*/
+
+/*    logout(): Observable<any> {
+
+        return new Observable((observer) => {
+            localStorage.removeItem('authenticationToken');
+            sessionStorage.removeItem('authenticationToken');
+            observer.complete();
+        });
+    }*/
+}

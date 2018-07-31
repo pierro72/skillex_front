@@ -1,0 +1,143 @@
+
+
+.box-matrice{
+    overflow-x: scroll;
+}
+.box_rotate 
+{ 
+    text-align: right;
+    -moz-transform: rotate(-55deg);                 /* FF */ 
+    -o-transform: rotate(-55deg);                   /* Opera */ 
+    -webkit-transform: rotate(-55deg);              /* Safari, Chrome */ 
+    -ms-transform: rotate(-55deg) !important;       /* IE9 */ 
+    transform: rotate(45deg);                      /* CSS3 default */ 
+    zoom: 1; 
+    z-index: 0; 									/* NEEDED FOR IE8 */ 
+    width: 150px;
+    position: absolute; 
+
+    margin: -45px 50px 100px -115px;
+    font-size: 1.1em
+
+} 
+
+body, html
+{
+	font-size: 12px;
+	width: auto !important;
+	max-width: none !important;
+}
+
+table
+{
+    border-collapse: separate!important;
+    padding-top: 60px;
+    padding-right: 40px!important;
+	white-space: nowrap;
+	max-width: none !important;
+}
+
+.value
+{
+    -webkit-print-color-adjust: exact; 
+	border: solid 1px white;
+	text-align: center; 
+	width: 32px;
+	min-width: 32px;
+	height: 32px;
+	cursor: pointer; 
+}
+
+.value-equipe
+{
+    font-size: 1em;
+    font-weight: lighter;
+    background-color: #3c8dbc;
+    color: #ffffff;
+}
+
+.rotate-equipe
+{
+/*     font-weight:bold; */
+    font-size: 1em;
+    color: #3c8dbc;
+}
+
+/* .equipe
+{
+    font-size: 1em;
+    font-weight: lighter;
+    color: #999999;
+} */
+
+h3 {
+	font-size: 12pt;
+	margin-left: 20px;
+}
+
+a[href]:after {
+    content: none;
+}
+
+.x {
+	background-color: #eee;
+	height: 23px;
+	width: 23px;
+	min-width: 23px;
+}
+
+.note0 { background-color: #EBB6A2;}
+.note1 { background-color: #EECD98;}
+.note2 { background-color: rgb(242, 218, 141); }
+.note3 { background-color: rgb(202, 246, 131)}
+.note4 { background-color: #ACFA78;}
+.note5 { background-color: #77FE6C; }
+.noteplus { background-color: #77FE6C }
+.notemoins { background-color: #EBB6A2}
+
+@media print {
+
+    .value {
+        height: auto  !important;
+        width: auto  !important;
+        min-width: auto  !important;
+    }
+
+    .box { overflow-x: auto;}
+    #matrice {
+        font-size: 0.8em !important;
+        -webkit-print-color-adjust: exact !important; 
+    }
+    .cat1Row > th  { 
+        padding-left: 10px !important;
+        padding-bottom: 2px !important;
+        padding-top: 2px !important;
+    }
+    .cat1Row > th , .cat1Row > td {
+        background-color: #999999 !important;
+    }
+    .cat2Row > th , .cat2Row > td {
+        background-color: #bbbbbb !important;
+    }
+    .cat2Row > th {
+        padding-left: 40px !important;
+        padding-bottom: 2px !important;
+        padding-top: 2px !important;
+    }
+    .cat3Row > th , .cat3Row > td {
+        background-color: #dddddd !important;
+    }
+    .cat3Row > th  {
+        padding-left: 60px !important;
+        padding-bottom: 2px !important;
+        padding-top: 2px !important;
+    }
+    .competence_row> th {
+        padding-left: 80px !important;
+        padding-bottom: 2px !important;
+        padding-top: 2px !important;
+    }
+
+
+
+}

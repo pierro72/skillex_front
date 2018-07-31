@@ -1,0 +1,99 @@
+<div class="box">
+
+    <div class="box-header">
+        <h3 class="box-title"> {{  'recherche.titre.2' | translate }}</h3>
+     </div>
+
+    <div class="box-body">
+        <ng-content *ngIf="true; then searchBar"></ng-content>
+        <div class="plein-page">
+            <div *ngFor="let collaborateur of collaborateurs | nameFilter : searchText">
+                <div class="col-md-6">
+                    <div class="box-widget widget-user" [routerLink]="['/collaborateur', collaborateur.id]"  routerLinkActive="active" title="{{ 'infobulle.matrice.collaborateur' | translate:{value:collaborateur.prenom} }}">
+
+                        <div *ngIf="!collaborateur.admin" class="widget-user-header bg-aqua-active">
+                            <h4 class="widget-user-username"> {{collaborateur.prenom}} {{collaborateur.nom}}</h4>
+                        </div>
+
+                        <div *ngIf="collaborateur.admin" class="widget-user-header bg-yellow">
+                            <h4 class="widget-user-username"> {{collaborateur.prenom}} {{collaborateur.nom}}</h4>
+                            <h5 class="widget-user-desc"> Admin </h5>
+                        </div>
+
+                        <div class="widget-user-image"> <img class="img-circle" src="assets/img/fr.png"  alt="User Avatar"> </div>
+                        <div class="box-footer">
+
+                            <div class="row">
+                                <div class="evaluation" *ngFor="let evaluation of collaborateur.evaluations">
+                                    <div>
+                                        <span *ngIf="evaluation.difference==0"  class="label label-default"> {{evaluation.libelle}} </span>
+                                        <span *ngIf="evaluation.difference==1"  class="label label-info">    {{evaluation.libelle}} </span>
+                                        <span *ngIf="evaluation.difference>1"   class="label label-success"> {{evaluation.libelle}} </span>
+                                        <ng-container *ngTemplateOutlet="eval; context:{evaluation: evaluation}"></ng-container>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- barre de recherche -->
+<ng-template #searchBar>
+    <form class="well well-sm navbar-form" novalidate="" role="search">
+        <div class="input-group add-on"  title="{{ 'infobulle.recherche.competence' | translate }}" >
+            <input [(ngModel)]="searchText" class="form-control" id="srch-term" name="srch-term" placeholder="Recherche" type="text">
+            <div class="input-group-btn"> <button class="btn btn-default" type="submit"> <i class="fa fa-search"></i> </button> </div>
+        </div>
+    </form>
+</ng-template>
+
+<!-- Modal d'aide Administration-->
+<ng-template #help>
+    <div class="modal fade" id="help" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{ 'arborescence' | translate }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>  <strong class="text-blue"> <i class="fa fa-code-fork branche" style="margin-left: 10px;"></i>  {{ 'branche' | translate }} </strong> : Cliquez pour editer/supprimer la catégorie <br /></p>
+                    <p> <strong class="text-green"> <i class="ion ion-ribbon-b competence" style="margin-left: 10px;"></i> {{ 'competence' | translate }} </strong> : Cliquez editer/supprimer la compétence <br /> </p>
+                </div>
+                <div class="modal-footer">  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #eval let-evaluation="evaluation">
+    <div style="description-text">
+        <ng-container *ngIf="evaluation.note>=1 ; then star; else nostar"> </ng-container>
+        <ng-container *ngIf="evaluation.note>=2 ; then star; else nostar"> </ng-container>
+        <ng-container *ngIf="evaluation.note>=3 ; then star; else nostar"> </ng-container>
+        <ng-container *ngIf="evaluation.note>=4 ; then star; else nostar"> </ng-container>
+        <ng-container *ngIf="evaluation.note>=5 ; then star; else nostar"> </ng-container>
+    </div>
+</ng-template>
+
+
+<ng-template #star>
+    <i class="fa fa-star"></i>
+</ng-template>
+
+<ng-template #nostar>
+    <i class="fa fa-star-o"></i>
+</ng-template>
+
+
+
+
+
+
+

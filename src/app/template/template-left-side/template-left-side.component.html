@@ -1,0 +1,32 @@
+<aside class="main-sidebar" >
+    <section class="sidebar">
+
+        <ul class="sidebar-menu tree" data-widget="tree" >
+
+            <li class="header"> Navigation principal</li>
+            <li> <a [routerLink]="['/home']" routerLinkActive="active"> <i class="fa fa-home"> </i> <span> Accueil </span></a></li>
+            <li> <a [routerLink]="['/gestion-competence-acquise']" routerLinkActive="active"> <i class="ion ion-ribbon-b "> </i> <span> Mes compétences </span></a></li>
+            <li> <a [routerLink]="['/recherche']"routerLinkActive="active"> <i class="fa fa-search"> </i> <span> Recherche de profil </span></a></li>
+            <li> <a [routerLink]="['/matrice']" routerLinkActive="active"> <i class="fa fa-th"> </i> <span> Matrice d'équipes </span></a> </li>
+
+            <ng-container >
+                <ng-container *ngIf="ihniAccount.role == 'pilote'">
+                    <li class="header"> Pilotage</li>
+                    <li> <a [routerLink]="['/gestion-competence-requise']"  routerLinkActive="active"> <i class="fa fa-circle-o"> </i><span> Mon équipe </span></a> </li>
+                </ng-container >
+
+                <ng-container *ngIf="ihniAccount.admin">
+                    <li class="header"> Admin</li>
+                    <li> <a [routerLink]="['/administration']"      routerLinkActive="active"> <i class="fa fa-lock"> </i> <span> Base de compétence</span></a></li>
+                </ng-container >
+            </ng-container>
+        </ul>
+      <div style="position: fixed; left: 1em; bottom: 0; color: white;">
+        <i>{{appName}} {{version}}</i>
+      </div>
+    </section>
+</aside>
+
+<ng-template #loading>
+    <p> loading </p>
+</ng-template>

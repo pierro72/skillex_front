@@ -1,0 +1,63 @@
+<section class="content-header">
+    <alert></alert>
+    <h1>  <i class="fa fa-lock text-red"></i> {{ 'admin.titre' | translate }}
+        <div class="box-tools pull-right">
+            <div href="#aide" data-toggle="collapse"> <i class="fa fa-info-circle fa-lg"></i> </div>
+        </div>
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- ecran d'aide -->
+    <div class="box box-solid collapse" id="aide">
+        <div class="box-body">
+            <ul class="nav nav-pills nav-stacked">
+                <li>  <app-info-admin-pourquoi></app-info-admin-pourquoi> </li>
+                <li>  <app-info-admin-qui></app-info-admin-qui> </li>
+                <li>  <app-info-admin-branche-ajouter></app-info-admin-branche-ajouter> </li>
+                <li>  <app-info-admin-branche-editer></app-info-admin-branche-editer> </li>
+                <li>  <app-info-admin-branche-supprimer></app-info-admin-branche-supprimer> </li>
+                <li>  <app-info-admin-competence-ajouter></app-info-admin-competence-ajouter> </li>
+                <li>  <app-info-admin-competence-editer></app-info-admin-competence-editer> </li>
+                <li>  <app-info-admin-competence-supprimer></app-info-admin-competence-supprimer> </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+
+        <!-- ecran gauche - Arbre -->
+        <div class="col-md-4">
+            <app-branche
+                (eventClickBranche)     =   'updateSelectedBranche($event.branche, $event.branches)'
+                (eventClickCompetence)  =   'updateSelectedCompetence($event.competence, $event.competences)'
+                [branches]              =   "contextService.branches"
+                [view]                  =   "'box'">
+            </app-branche>
+        </div>
+
+        <!-- ecran droite - Details -->
+        <div *ngIf="!maskRightPanel" >
+            <div *ngIf="isShowBranche" class="col-md-8">
+                <!-- FIXME:  -->
+                <app-branche-detail
+                    (eventChangeBranche) = 'reloadAfterChange()'
+                    [branche]           = "selectedBranche"
+                    [branches]           = "selectedBranches"
+                    [view]              = "'box'">
+                </app-branche-detail>
+            </div>
+            <div *ngIf="!isShowBranche" class="col-md-8">
+                <!-- FIXME:  -->
+                <app-competence-detail
+                    (eventDeleteCompetence) = 'reloadAfterChange()'
+                    [competence]            = "selectedCompetence"
+                    [competences]           = "selectedCompetences"
+                    [view]                  = "'box'">
+                </app-competence-detail>
+            </div>
+        </div>
+    </div>
+</section>
+

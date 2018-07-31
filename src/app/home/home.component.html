@@ -1,0 +1,18 @@
+<!-- Content Header (Page header) -->
+<section class="content-header" >
+    <h1> <i class="fa fa-home text-red"></i> {{ 'home.titre' | translate }}<small>Vous êtes connecté avec un profil <strong>{{contextService.ihniAccount.role}}</strong></small>
+        <div class="box-tools pull-right">
+        </div>
+    </h1>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- ecran d'aide -->
+    <div class="box  box-primary" id="aide">
+        <div class="box-body">
+            <ul class="nav nav-pills nav-stacked">
+                <li> <app-info-general-quoi></app-info-general-quoi> </li>
+            </ul>
+        </div>
+    </div>
+</section>

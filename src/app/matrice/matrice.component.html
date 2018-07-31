@@ -1,0 +1,210 @@
+<!-- header -->
+<section class="content-header">
+    <h1> <i class="fa fa-th text-red"></i> {{ 'matrice.titre' | translate }}
+        <div class="box-tools pull-right">
+            <div href="#aide" data-toggle="collapse"> <i class="fa fa-info-circle fa-lg"></i> </div>
+        </div>
+    </h1>
+</section>
+
+<!-- contenu -->
+<section class="content" >
+    <!-- Aide -->
+    <div class="box box-solid collapse" id="aide">
+        <div class="box-body">
+            <ul class="nav nav-pills nav-stacked">
+                <li> <app-info-matrice-quoi></app-info-matrice-quoi> </li>
+                <li> <app-info-matrice-qui></app-info-matrice-qui> </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Parametre -->
+        <div class="col-md-4">
+            <ng-container *ngTemplateOutlet="filter"> </ng-container>
+<!--            <div *ngIf="equipeCourante as result; then filter" ></div> </div>-->
+        </div>
+        <!-- Matrice -->
+        <div class="col-md-8">
+            <div *ngIf="equipeCourante  && equipeCouranteBranches; then matrice" ></div>
+<!--             <div *ngIf="branches as result then test" ></div> -->
+        </div>
+
+    </div>
+</section>
+
+
+<!-- Template parametre -->
+<ng-template #filter>
+    <div  class="box box-default" >
+        <div class="box-header">
+            <h3 class="box-title"> Paramètres </h3>
+        </div>
+        <div class="box-body">
+            <!-- Parametre 1 -->
+            <div class="form-group">
+                <label> Equipes  </label>
+                <select [(ngModel)]="equipeSelect" (ngModelChange)="updateMatrice($event)" class="form-control" >
+                    <ng-container *ngFor= "let equipe of equipes">
+                        <option [ngValue] ="equipe">
+                            {{equipe.nom}}
+                        </option>
+                    </ng-container>
+                </select>
+            </div>
+
+            <!-- Parametre 2 -->
+            <div class="form-group">
+                <label> Niveau de détails </label>
+                <select  [(ngModel)]="levelMax" (ngModelChange)="levelMax =$event" class="form-control"  title="{{ 'infobulle.matrice.choix.detail' | translate}}" >
+                    <option [ngValue] ="2"> Simple </option>
+                    <option [ngValue] ="3"> Détaillé </option>
+                </select>
+            </div>
+
+            <!-- Parametre 4 -->
+            <div class="checkbox" title="{{ 'infobulle.matrice.required.checkbox' | translate }}" >
+                <label>  <input type="checkbox" [checked]="isRequiredShow" (change)="isRequiredShow = $event.target.checked" > {{ 'level.requis' | translate }} </label>
+            </div>
+
+        </div>
+
+        <div class="box-footer" *ngIf="equipeCourante.competenceRequises?.length>0">
+            <button type="button" class="btn" (click)="PrintRecord()">  <i class="fa fa-download"></i> Version imprimable </button>
+        </div>
+
+    </div>
+</ng-template>
+
+
+<!-- Template matrice -->
+<ng-template #matrice>
+    <div class="box box-default" id="matrice">
+        <div class="box-header"> <h3 class="box-title"> Matrice {{equipeCourante.nom}} </h3> </div>
+        <div class="box-body">
+            <ng-container *ngIf="equipeCourante.competenceRequises?.length>0; else noMatrice">
+                <table class="table table-sm">
+                    <thead >
+                        <tr style="height: 10px;">
+                            <td>&nbsp;</td>
+                            <td  *ngIf="isRequiredShow"> <p  class="box_rotate rotate-equipe"> </p> </td>
+                            <td *ngFor= "let collaborateur of equipeCourante.collaborateurs"  >
+                                <a title="{{ 'infobulle.matrice.collaborateur' | translate:{value:collaborateur.prenom} }}" class="box_rotate" [routerLink]="['/collaborateur', collaborateur.id]"  routerLinkActive="active">{{collaborateur.prenom}} {{collaborateur.nom[0] }}.</a>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="equipeCouranteBranches as result else loadingMatrice">
+                        <ng-container *ngTemplateOutlet="arbre; context:{branches: equipeCouranteBranches, level: 1}"></ng-container>
+                    </tbody>
+                </table>
+            </ng-container>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #arbre let-branches="branches" let-level="level">
+        <ng-container *ngFor="let branche of branches;">
+            <tr *ngIf="level<=levelMax" class='{{cssClassRow(level)}}' >
+                <th> <i class="fa fa-code-fork"></i> {{branche.libelle}}  </th>
+                <!-- FIXME: -->
+                <td  *ngIf="isRequiredShow"> </td>
+                <td  *ngFor= "let collaborateur of equipeCourante.collaborateurs"> </td>
+            </tr>
+            <tr class="competence_row" *ngFor="let competence of branche.competences;">
+                <th > <i class="ion ion-ribbon-b"></i> {{competence.libelle}} </th>
+                <ng-container *ngTemplateOutlet="requiredValue; context:{competence: competence}"></ng-container>
+                <ng-container *ngTemplateOutlet="simplegrid2; context:{competence: competence}"></ng-container>
+            </tr>
+            <ng-container *ngTemplateOutlet="arbre; context:{branches: branche.sousBranches, level: level+1}"></ng-container>
+        </ng-container>
+</ng-template>
+
+<ng-template #simplegrid2 let-competence="competence">
+    <ng-container class="value" *ngFor= "let collaborateur of equipeCourante.collaborateurs">
+        <ng-container *ngFor="let evaluation of collaborateur.evaluations" >
+            <ng-container  *ngIf= "evaluation.competenceId == competence.id">
+
+                <td title="{{ 'infobulle.matrice.acquired.value' | translate:{value : competence.libelle, value2 : collaborateur.prenom} }}"  *ngIf="evaluation.note==0"  class="value note0" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container> </td>
+                <td title="{{ 'infobulle.matrice.acquired.value' | translate:{value : competence.libelle, value2 : collaborateur.prenom} }}"  *ngIf="evaluation.note==1"  class="value note1" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container> </td>
+                <td title="{{ 'infobulle.matrice.acquired.value' | translate:{value : competence.libelle, value2 : collaborateur.prenom} }}"  *ngIf="evaluation.note==2"  class="value note2" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container></td>
+                <td title="{{ 'infobulle.matrice.acquired.value' | translate:{value : competence.libelle, value2 : collaborateur.prenom} }}"  *ngIf="evaluation.note==3"  class="value note3" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container> </td>
+                <td title="{{ 'infobulle.matrice.acquired.value' | translate:{value : competence.libelle, value2 : collaborateur.prenom} }}"  *ngIf="evaluation.note==4"  class="value note4" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container> </td>
+                <td title="{{ 'infobulle.matrice.acquired.value' | translate:{value : competence.libelle, value2 : collaborateur.prenom} }}"  *ngIf="evaluation.note==5"  class="value note5" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container> </td>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</ng-template>
+
+<!-- FIXME: -->
+<ng-template  #requiredValue let-competence="competence" >
+    <ng-container *ngIf="isRequiredShow" >
+        <ng-container *ngFor="let cRequise of equipeCourante.competenceRequises" >
+            <ng-container  *ngIf= "cRequise.competence.id == competence.id">
+                <td class="value value-equipe"  title="{{ 'infobulle.matrice.required.value' | translate:{ value: competence.libelle} }}" > {{cRequise.note}} </td>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+        <!-- <ng-container *ngFor="let cRequise of equipe.competenceRequises" >
+            <ng-container  *ngIf= "cRequise.competence.id == competence.id">
+                    <td *ngIf="cRequise.note==0"  class="value note0 equipe" > {{cRequise.note}} </td>
+                    <td *ngIf="cRequise.note==1"  class="value note1 equipe" > {{cRequise.note}} </td>
+                    <td *ngIf="cRequise.note==2"  class="value note2 equipe" > {{cRequise.note}} </td>
+                    <td *ngIf="cRequise.note==3"  class="value note3 equipe" > {{cRequise.note}} </td>
+                    <td *ngIf="cRequise.note==4"  class="value note4 equipe" > {{cRequise.note}} </td>
+                    <td *ngIf="cRequise.note==5"  class="value note5 equipe" > {{cRequise.note}} </td>
+            </ng-container>
+        </ng-container> -->
+</ng-template>
+
+<!--
+<ng-template #simplegrid>
+    <tr  *ngFor="let competenceRequise of equipe.competenceRequises">
+        <th> {{competenceRequise.competence.libelle}}  </th>
+        <ng-container class="value" *ngFor= "let collaborateur of equipe.collaborateurs">
+            <ng-container *ngFor="let evaluation of collaborateur.evaluations" >
+                <ng-container  *ngIf= "evaluation.competenceId == competenceRequise.competence.id">
+                    <td *ngIf="evaluation.note==0"  class="value note0" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container> </td>
+                    <td *ngIf="evaluation.note==1"  class="value note1" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container> </td>
+                    <td *ngIf="evaluation.note==2"  class="value note2" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container></td>
+                    <td *ngIf="evaluation.note==3"  class="value note3" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container> </td>
+                    <td *ngIf="evaluation.note==4"  class="value note4" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container> </td>
+                    <td *ngIf="evaluation.note==5"  class="value note5" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container> </td>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </tr>
+</ng-template> -->
+
+<ng-template #diffgrid>
+    <tr  *ngFor="let competenceRequise of equipeCourante.competenceRequises">
+        <th> {{competenceRequise.competence.libelle}}  </th>
+        <ng-container class="value" *ngFor= "let collaborateur of equipeCourante.collaborateurs">
+            <ng-container *ngFor="let evaluation of collaborateur.evaluations" >
+                <ng-container  *ngIf= "evaluation.competenceId == competenceRequise.competence.id">
+                    <td *ngIf="evaluation.difference<0"  class="value notemoins" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container> </td>
+                    <td *ngIf="evaluation.difference>=0"  class="value noteplus" > <ng-container *ngIf="!isHideNote"> <ng-container *ngIf="evaluation.note>0; else note0"> {{evaluation.note}}</ng-container> </ng-container>  </td>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </tr>
+</ng-template>
+
+<ng-template #note0> - </ng-template>
+
+
+<ng-template #other_content>
+    <div class="note1" > 1 </div>
+</ng-template>
+
+<ng-template #loadingBranche>Chargement Branche...</ng-template>
+
+<ng-template #loadingEquipe>Chargement Equipe...</ng-template>
+
+<ng-template #loadingMatrice>Chargement Matrice...</ng-template>
+
+<ng-template #noMatrice > Pas de matrice pour l'équipe {{equipeCourante.nom}}</ng-template>
+
+<ng-template #noCollaborateur > Equipe vide</ng-template>
+
+

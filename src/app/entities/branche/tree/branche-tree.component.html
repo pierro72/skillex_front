@@ -1,0 +1,116 @@
+<div *ngIf="view=='box'; then templateBox"></div>
+<div *ngIf="view=='min'; then templateMin"></div>
+<div *ngIf="view=='branche'; then templateBranche"></div>
+<div *ngIf="view=='sousBranche'; then templateSousBranche"></div>
+<div *ngIf="view=='addCompetence'; then templateAddCompetence"></div>
+
+<ng-template #templateMin>   
+        <ng-content *ngIf="true; then searchBar"></ng-content>
+        <div class="tree plein-page" *ngIf="branches; else Loading">
+            <ul > <div *ngIf="true; then templateBranche"></div> </ul>
+        </div>
+</ng-template>
+
+<ng-template #templateBox>   
+    <div class="box">
+        <div class="box-header">  
+            <h3 class="box-title">{{'arborescence' | translate}}</h3>            
+        </div>
+        <div class="box-body">
+            <!-- Filtre competence -->
+            <ng-content *ngIf="true; then searchBar"></ng-content>
+            <!-- Abre -->
+            <div class="tree plein-page" *ngIf="branches; else Loading">
+                <ul > <div *ngIf="true; then templateBranche"></div> </ul>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+<!-- Liste branche 1er niveau -->
+<ng-template #templateBranche>
+    <div *ngIf="branches as result else loading">
+        <li *ngFor="let branche of branches; let i = index" [attr.data-index]="branche.id"   >
+            <a class="branche"  data-toggle="collapse" href="#collapse-{{branche.id}}" aria-expanded="true" (click)="clickBranche(branche, branches)" title="{{ 'infobulle.branche.1' | translate }}"> <i class="fa fa-code-fork"></i> &nbsp; {{branche.libelle }}</a> 
+            <ul id="collapse-{{branche.id}}" class="collapse in"> 
+                <app-branche 
+                    (eventClickBranche)     = 'clickBranche($event.branche, $event.branches)'
+                    (eventClickCompetence)  = 'clickCompetence($event.competence, $event.competences)'                    
+                    [view]                  = "'sousBranche'" 
+                    [branches]              = "branche.sousBranches"
+                    [searchText]            = "searchText" >
+                </app-branche>
+                <li *ngFor="let competence of branche.competences | treeFilter : searchText" >
+                    <a [routerLink]="" class="competence" (click)="clickCompetence(competence, branche.competences)"  > <i class="ion ion-ribbon-b"></i> &nbsp; {{competence.libelle}} </a> 
+                </li> 
+            </ul>
+        </li>
+    </div>
+</ng-template>
+
+<!-- Liste branche >1 niveau -->
+<ng-template #templateSousBranche>
+    <div *ngIf="branches as result else loading">
+        <li *ngFor="let branche of branches| treeFilter2 : searchText; let i = index" [attr.data-index]="branche.id"   >
+            <a class="branche"  data-toggle="collapse" href="#collapse-{{branche.id}}" aria-expanded="false" (click)="clickBranche(branche, branches)"  title="{{ 'infobulle.branche.2' | translate }}"> <i class="fa fa-code-fork"></i> &nbsp; {{branche.libelle }}</a> 
+            <ul id="collapse-{{branche.id}}" class="collapse in"> 
+                <app-branche 
+                    (eventClickBranche)     = 'clickBranche($event.branche, $event.branches)'
+                    (eventClickCompetence)  = 'clickCompetence($event.competence, $event.competences)'                    
+                    [view]                  = "'sousBranche'" 
+                    [branches]              = "branche.sousBranches"
+                    [searchText]            = "searchText" >
+                </app-branche>
+                <li *ngFor="let competence of branche.competences | treeFilter : searchText" >
+                    <a [routerLink]="" class="competence" (click)="clickCompetence(competence, branche.competences)"  title="{{ 'infobulle.competence' | translate }}"> <i class="ion ion-ribbon-b"></i> &nbsp; {{competence.libelle}} </a> 
+                </li> 
+            </ul>
+        </li>
+    </div>
+</ng-template>
+
+<!-- Liste competences -->
+<ng-template #templateAddCompetence>
+    <div *ngIf="branches as result else loading">
+        <li *ngFor="let branche of branches | treeFilter2 : searchText; let i = index" [attr.data-index]="branche.id"   >
+            <a class="branche"  data-toggle="collapse" href="#collapse-{{branche.id}}" aria-expanded="false" > <i class="fa fa-code-fork"></i> &nbsp; {{branche.libelle}}</a> 
+            <ul id="collapse-{{branche.id}}" class="collapse"> 
+                <app-branche 
+                    [branches]   = "branche.sousBranches "
+                    (eventClickCompetence)  = 'clickCompetence($event.competence, $event.competences)' 
+                    [view]                  = "'addCompetence'"
+                    [searchText]            = "searchText"  >
+                </app-branche>
+                <li *ngFor="let competence of branche.competences | treeFilter : searchText" >
+                    <a [routerLink]="" class="competence"  (click)="clickCompetence(competence, branche.competences)"> <i class="ion ion-ribbon-b"></i> &nbsp; {{competence.libelle}} </a> 
+                    <!-- <button [routerLink]=""  > <i class="fa fa-star"> </i> </button> &nbsp; {{competence.libelle }}  -->
+                </li> 
+            </ul>
+        </li>
+    </div>
+</ng-template>
+
+<!-- barre de recherche -->
+<ng-template #searchBar>
+    <form class="well well-sm navbar-form" novalidate="" role="search">
+        <div class="input-group add-on" title="{{ 'infobulle.recherche.competence' | translate }}">
+            <input [(ngModel)]="searchText" class="form-control" id="srch-term" name="srch-term" placeholder="Recherche" type="text">
+            <div class="input-group-btn"> <button class="btn btn-default" type="submit"> <i class="fa fa-search"></i> </button> </div>
+        </div>
+    </form>
+</ng-template>
+
+<!-- Chargement -->
+<ng-template #loading> {{'chargement' | translate }} </ng-template>
+
+
+
+
+
+
+
+
+
+
+

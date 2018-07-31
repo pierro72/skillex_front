@@ -1,0 +1,135 @@
+<div *ngIf="view=='box'">
+    <section class="content-header">
+        <h1> Gestion des collaborateurs <small> Simple</small> </h1>
+    </section>
+    
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Liste des collaborateurs</h3>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-striped" *ngIf="collaborateurs">
+                            <thead>
+                                <tr>
+                                    <th> <span>  {{'collaborateur.id' | translate }}</span> </th>
+                                    <th> <span>  {{'collaborateur.Nom' | translate }}</span> </th>
+                                    <th> <span>  {{'collaborateur.poste' | translate }}</span> </th>
+                                    <th> <span>  {{'collaborateur.prenom' | translate }}</span> </th>
+                                    <th> <span>  {{'collaborateur.pseudo' | translate }}</span> </th>
+                                    <th> <span>  {{'collaborateur.admin' | translate }}</span> </th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let collaborateur of collaborateurs">
+                                    <td>{{collaborateur.id}}</td>
+                                    <td>{{collaborateur.nom}}</td>
+                                    <td>{{collaborateur.poste}}</td>
+                                    <td>{{collaborateur.prenom}}</td>
+                                    <td>{{collaborateur.pseudo}}</td>
+                                    <td>{{collaborateur.admin}}</td>
+    
+                                    <td class="text-right">
+                                        <div class="btn-group" role="group" >
+                                            <button class="btn btn-info" type="submit" [routerLink]="['/collaborateur', collaborateur.id ]" > <i class="fa fa-eye"></i> </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>    
+</div>
+
+<div *ngIf="view=='includComplete'"> 
+    <table class="table table-striped" *ngIf="collaborateurs">
+        <thead>
+            <tr>
+                <th> <span> ID </span> </th>
+                <th> <span> Nom </span> </th>
+                <th> <span> poste </span> </th>
+                <th> <span> prenom </span> </th>
+                <th> <span> pseudo </span> </th>
+                <th> <span> admin </span> </th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let collaborateur of collaborateurs">
+                <td><a #collaborateurId [routerLink]="" (click)="openEditModal(collaborateur.id)">{{collaborateur.id}}</a></td>
+                <td>{{collaborateur.nom}}</td>
+                <td>{{collaborateur.poste}}</td>
+                <td>{{collaborateur.prenom}}</td>
+                <td>{{collaborateur.pseudo}}</td>
+                <td>{{collaborateur.admin}}</td>
+
+                <td class="text-right">
+                    <div class="btn-group" role="group" >
+                        <button class="btn btn-info" type="submit" [routerLink]="['/collaborateur', collaborateur.id ]" > <i class="fa fa-eye"></i> </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="view=='includDetail'"> 
+    <table class="table table-striped" *ngIf="collaborateurs">
+        <tbody>
+            <tr *ngFor="let collaborateur of collaborateurs">
+                <td><a #collaborateurId [routerLink]="" (click)="openEditModal(collaborateur.id)">{{collaborateur.id}}</a></td>
+                <td>{{collaborateur.nom}}</td>
+                <td>{{collaborateur.poste}}</td>
+                <td>{{collaborateur.prenom}}</td>
+                <td>{{collaborateur.pseudo}}</td>
+                <td>{{collaborateur.admin}}</td>
+                <td class="text-right">
+                    <div class="btn-group" role="group" >
+                        <button class="btn btn-info" type="submit" [routerLink]="['/collaborateur', collaborateur.id ]" > <i class="fa fa-eye"></i> </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="view=='minimal'"> 
+    <div *ngFor="let collaborateur of collaborateurs">
+        <div class="col-md-4">
+            <div class="box box-widget widget-user ">
+                <div class="widget-user-header bg-aqua-active">
+                    <h3 class="widget-user-username"> {{collaborateur.prenom}} {{collaborateur.nom}}</h3>
+                    <h4 class="widget-user-desc">&nbsp;&nbsp; {{collaborateur.poste}}</h4>
+                    <div class="widget-user-image">
+                        <img class="img-circle" src="assets/img/Superman_avatar.jpg"  alt="User Avatar">
+                    </div>
+                </div>
+                <div class="nav-tabs-custom">
+                    <div class="tab-content">
+                        <i class="fa fa-cubes"></i>
+                        <strong>Compétences :</strong>
+<!--                         <app-competence-acquise  [competenceAcquises]="collaborateur.competenceAcquises" [view]="'minimal'"></app-competence-acquise> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

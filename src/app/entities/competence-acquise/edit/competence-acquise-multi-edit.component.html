@@ -1,0 +1,79 @@
+
+<div class="box">
+
+    <div class="box-header">
+        <h3 class="box-title"> {{ 'collaborateur.competence.titre.2' | translate }} </h3>
+    </div>
+
+    <div class="box-body">
+
+        <!-- Filtre competence -->
+        <form class="well well-sm navbar-form" novalidate="" role="search">
+            <div class="input-group add-on"  title="{{ 'infobulle.recherche.competence' | translate }}">
+                <input [(ngModel)]="searchText" class="form-control" id="srch-term" name="srch-term" placeholder="Recherche" type="text">
+                <div class="input-group-btn"> <button class="btn btn-default" type="submit"> <i class="fa fa-search"></i> </button> </div>
+            </div>
+        </form>
+
+        <!-- Tableau de compétence -->
+        <div class="plein-page">
+            <table class="table table-sm"  *ngIf="branches as result ">
+                <tbody>
+                    <ng-container *ngTemplateOutlet="arbre; context:{branches: branches, level: 1}"></ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- template Arbre -->
+<ng-template #arbre let-branches="branches" let-level="level">
+        <ng-container *ngFor="let branche of branches;">
+            <ng-container *ngIf="branche.collaborateur">
+                <tr title="{{ 'infobulle.branche' | translate }}"  *ngIf="level<=3" class='{{cssClassRow(level)}}' >
+                    <th > <i class="fa fa-code-fork "></i> {{branche.libelle}}  </th>
+                    <th ></th>
+                    <th  ></th>
+                </tr>
+                <ng-container *ngFor="let competence of branche.competences;">
+                    <ng-container *ngFor="let competenceAcquise of collaborateur.competenceAcquises  | libelleFilter : searchText">
+                        <tr title="{{ 'infobulle.competence' | translate }}" class="competence_row" *ngIf="competence.id == competenceAcquise.competence.id">
+                            <th  > <i class="ion ion-ribbon-b"></i> {{competence.libelle}} </th>
+                            <td >
+                                <ng-container *ngFor="let competenceRequise of equipe.competenceRequises">
+                                    <i class="fa fa-users" title="{{ 'infobulle.competence.equipe' | translate }}"  *ngIf="competenceAcquise.competence.id == competenceRequise.competence.id" >   </i>
+                                </ng-container>
+                            </td>
+                            <td class="text-right">
+                                <div>
+                                    <i  title="{{ 'infobulle.note.1' | translate }}" *ngIf="competenceAcquise.note>=1"  class="fa fa-star" (click)= "updateNote(competenceAcquise, 1)"></i> <i *ngIf="competenceAcquise.note<1"  class="fa fa-star-o" (click)= "updateNote(competenceAcquise, 1)" title="{{ 'infobulle.note.1' | translate }}"></i>
+                                    <i  title="{{ 'infobulle.note.2' | translate }}" *ngIf="competenceAcquise.note>=2"  class="fa fa-star" (click)= "updateNote(competenceAcquise, 2)"></i> <i *ngIf="competenceAcquise.note<2"  class="fa fa-star-o" (click)= "updateNote(competenceAcquise, 2)" title="{{ 'infobulle.note.2' | translate }}"></i>
+                                    <i  title="{{ 'infobulle.note.3' | translate }}" *ngIf="competenceAcquise.note>=3"  class="fa fa-star" (click)= "updateNote(competenceAcquise, 3)"></i> <i *ngIf="competenceAcquise.note<3"  class="fa fa-star-o" (click)= "updateNote(competenceAcquise, 3)" title="{{ 'infobulle.note.3' | translate }}" ></i>
+                                    <i  title="{{ 'infobulle.note.4' | translate }}" *ngIf="competenceAcquise.note>=4"  class="fa fa-star" (click)= "updateNote(competenceAcquise, 4)"></i> <i *ngIf="competenceAcquise.note<4"  class="fa fa-star-o" (click)= "updateNote(competenceAcquise, 4)" title="{{ 'infobulle.note.4' | translate }}" ></i>
+                                    <i  title="{{ 'infobulle.note.5' | translate }}" *ngIf="competenceAcquise.note>=5"  class="fa fa-star" (click)= "updateNote(competenceAcquise, 5)"></i> <i *ngIf="competenceAcquise.note<5"  class="fa fa-star-o" (click)= "updateNote(competenceAcquise, 5)" title="{{ 'infobulle.note.5' | translate }}" ></i>
+                                    <button title="{{ 'infobulle.competence.retirer' | translate }}" style ="margin-left: 10px;"type="button" class="close" (click)= "delete(competenceAcquise)"  type="submit" data-effect="fadeOut" >&times;</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </ng-container>
+                <ng-container  *ngTemplateOutlet="arbre; context:{branches: branche.sousBranches, level: level+1}"></ng-container>
+            </ng-container>
+        </ng-container>
+</ng-template>
+
+
+<!-- Instruction -->
+<ng-template #instruction>
+    <div class="text-muted well well-sm no-shadow">
+        <strong> {{ 'ajouter.competence' | translate }} </strong>
+        <ol>
+            <li> Dérouler l'arbre de compétence depuis la partie de gauche</li>
+            <li> Naviger dans les catégorie jusqu'a Accédez à la compétence souhaitez </li>
+            <li> cliquez sur la compétence pour l'ajouter  </li>
+        </ol>
+    </div>
+</ng-template>
+
+
+

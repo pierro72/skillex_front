@@ -1,0 +1,55 @@
+a {
+    border-radius: 0;
+    border-top: 0;
+    border-left: 3px solid transparent;
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+
+
+a:before {
+    content: "\f0fe"; /* FontAwesome Unicode */
+    font-family: FontAwesome;
+    display: inline-block;
+    margin-left: -1.3em; /* same as padding-left set on li */
+    width: 1.3em; /* same as padding-left set on li */
+}
+
+
+a.ou:before {
+    content: "\f245"; /* FontAwesome Unicode */
+} 
+
+a.qui:before {
+    content: "\f007"; /* FontAwesome Unicode */
+}
+
+a.quoi:before {
+    content: "\f059"; /* FontAwesome Unicode */
+}
+
+a.pourquoi:before {
+    content: "\f0eb"; /* FontAwesome Unicode */
+}
+
+a.info {
+    color: #444;
+}
+
+a.info:before {
+    content: "\f05a"; /* FontAwesome Unicode */
+}
+
+a.question:before {
+    content: "\f059"; /* FontAwesome Unicode */
+}
+
+ul {
+    list-style-type: disc;
+  }
+
+ ul> ul {
+    list-style-type: circle;
+  }
+  

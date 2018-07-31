@@ -1,0 +1,98 @@
+.plein-page {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height:75vh;
+}
+
+
+.fiche {
+    height:30vh;
+}
+
+.cat1Row {
+    color: #ECF0F5;
+    background-color: #222D32  !important;;
+    height: 1em;
+    font-size: 1em ;
+    padding-bottom: 4px !important;
+    padding-top: 4px !important;
+}
+
+.cat1Row> th {
+    padding-bottom: 4px !important;
+    padding-top: 4px !important;
+    padding-left: 10px !important;
+    font-weight:normal;
+}
+
+
+.cat2Row{
+    padding-bottom: 4px !important;
+    padding-top: 4px !important;
+    border: solid 1px white;
+    color: white;
+    background-color: #ABB2B9;
+    height: 1em;
+    font-size: 1em;
+}
+
+.cat2Row > th{
+    padding-bottom: 4px !important;
+    padding-top: 4px !important;
+    padding-left: 40px !important;
+    font-weight:normal;
+    text-shadow: 0px 0px 7px rgba(0, 0, 0, 0.1);
+}
+
+
+.cat3Row{
+    padding-bottom: 4px !important;
+    padding-top: 4px !important;
+    border: solid 1px white;
+    color: #333333;
+    background-color: #F5F5F5;
+    height: 1em;
+    font-size: 1em;
+}
+
+.cat3Row  > th{
+    padding-bottom: 4px !important;
+    padding-top: 4px !important;
+    padding-left: 70px !important;
+    font-weight:normal;
+}
+
+.competence_row {
+    font-weight:normal;
+}
+.competence_row> th{
+    font-weight:normal;
+    padding-left: 100px !important;
+    padding-bottom: 2px !important;
+    padding-top: 2px !important;
+}
+
+.competence_row> td{
+    padding: 2px !important;
+    font-weight:normal;
+}
+
+.fa-info-circle {
+    color :#3c8dbc;
+}
+
+html {
+    height: 100%;
+}
+body {
+    min-height: 100%;
+}
+
+.content {
+    height:100vh;
+}
+
+.fa-star:hover, .fa-star-o:hover {
+    cursor: pointer;
+}
+

@@ -1,0 +1,83 @@
+<section class="content-header">
+    <h1>  <i class="fa fa-search text-red"></i> {{ 'recherche.titre' | translate }}
+        <div class="box-tools pull-right">
+            <div href="#aide" data-toggle="collapse" title="{{ 'infobulle.aide' | translate }}"> <i class="fa fa-info-circle fa-lg"></i> </div>
+        </div>
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- ecran d'aide -->
+    <div class="box box-solid collapse"  id="aide">
+        <div class="box-body">
+            <ul class="nav nav-pills nav-stacked">
+                <li> <app-info-finder-critere-ajouter></app-info-finder-critere-ajouter> </li>
+                <li> <app-info-competence-evaluer></app-info-competence-evaluer> </li>
+                <li> <app-info-finder-critere-supprimer></app-info-finder-critere-supprimer> </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row" >
+        <div class="col-md-4 ">
+            <div class="box box-solid nav-tabs-custom">
+
+                <ul class="nav nav-tabs">
+                    <li title="{{ 'infobulle.finder.filter'| translate }}" [ngClass]="isFilterActive ? 'active' : ''" (click)="calculateStyles()" >  <a href="#criteres" data-toggle="tab">      <i class="fa fa-filter"></i>        {{ 'filtre' | translate }}</a> </li>
+                    <li title="{{ 'infobulle.finder.add'| translate }}"  [ngClass]="isCritereActive ? 'active' : ''" (click)="calculateStyles()" >  <a href="#addCritere" data-toggle="tab">    <i class="fa fa-plus-circle"></i>   {{ 'ajouter' | translate }}</a> </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div  [ngClass]="isCritereActive ? 'active' : ''" class="tab-pane" id="addCritere">
+                        <app-branche
+                        (eventClickCompetence)  =   'createCritere($event.competence, $event.competences)'
+                        [branches]              =   "contextService.branches"
+                        [view]                  =   "'min'"
+                        ></app-branche>
+                    </div>
+                    <div [ngClass]="isFilterActive ? 'active' : ''" class="tab-pane" id="criteres">
+                        <table *ngIf="criteres as result else loading"class="table table-striped">
+                            <tbody>
+                                <tr *ngFor="let critere of criteres">
+                                    <td title="{{ 'infobulle.competence.requise' | translate }}"> {{critere.libelle}}  </td>
+                                    <td>
+                                        <div style="text-align: center">
+                                            <i (click)= "updateCritereNote(critere, 1)"  title="{{ 'infobulle.note.1' | translate }}"  > <ng-container *ngIf="critere.note>=1 ; then star; else nostar"> </ng-container> </i>
+                                            <i (click)= "updateCritereNote(critere, 2)"  title="{{ 'infobulle.note.2' | translate }}" > <ng-container *ngIf="critere.note>=2 ; then star; else nostar"> </ng-container> </i>
+                                            <i (click)= "updateCritereNote(critere, 3)"  title="{{ 'infobulle.note.3' | translate }}" > <ng-container *ngIf="critere.note>=3 ; then star; else nostar"> </ng-container> </i>
+                                            <i (click)= "updateCritereNote(critere, 4)"  title="{{ 'infobulle.note.4' | translate }}" > <ng-container *ngIf="critere.note>=4 ; then star; else nostar"> </ng-container> </i>
+                                            <i (click)= "updateCritereNote(critere, 5)"  title="{{ 'infobulle.note.5' | translate }}" > <ng-container *ngIf="critere.note>=5 ; then star; else nostar"> </ng-container> </i>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <button type="submit" (click)= "deleteCritere(critere)" class="btn btn-xs btn-danger " > <i class="fa fa-trash-o"> </i> </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <!-- Collaborateurs -->
+            <app-collaborateur-card [collaborateurs] =   "sortedCollaborateurs"> </app-collaborateur-card>
+        </div>
+
+    </div>
+</section>
+
+
+<ng-template #loading>{{ 'chargement' | translate }}</ng-template>
+
+<ng-template #star>
+    <i class="fa fa-star"></i>
+</ng-template>
+
+<ng-template #nostar>
+    <i class="fa fa-star-o"></i>
+</ng-template>
+

@@ -1,0 +1,43 @@
+<section class="content-header">
+    <alert></alert>
+    <h1>  <i class="fa fa-users text-red"></i> {{ 'equipe.competence.titre' | translate }}  <small>{{contextService.ihniAccount.team}}</small>
+        <div class="box-tools pull-right">
+            <div href="#aide" data-toggle="collapse"> <i class="fa fa-info-circle fa-lg"></i> </div>
+        </div>
+    </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- ecran d'aide -->
+    <div class="box box-solid collapse" id="aide">
+        <div class="box-body">
+            <ul class="nav nav-pills nav-stacked">
+                <li> <app-info-competence-requise-quoi></app-info-competence-requise-quoi> </li>
+                <li> <app-info-competence-ajouter></app-info-competence-ajouter> </li>
+                <li> <app-info-competence-evaluer></app-info-competence-evaluer> </li>
+                <li> <app-info-competence-supprimer></app-info-competence-supprimer> </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- ecran gauche - Arbre -->
+        <div class="col-md-4">
+            <app-branche
+                (eventClickCompetence)  =   'updateSelectedCompetence($event.competence, $event.competences)'
+                [branches]              =   "contextService.branches"
+                [view]                  =   "'box'"
+            ></app-branche>
+        </div>
+        <!-- ecran droite - Listes des compétences-->
+        <div class="col-md-8" >
+            <app-competence-requise-multi-edit
+                [competenceToAdd]           =   "selectedCompetence"
+            ></app-competence-requise-multi-edit>
+        </div>
+
+    </div>
+</section>
+

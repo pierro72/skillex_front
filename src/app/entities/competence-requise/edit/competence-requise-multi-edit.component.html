@@ -1,0 +1,58 @@
+
+<div class="box">
+
+    <div class="box-header">
+        <h3 class="box-title"> {{ 'equipe.competence.titre.2' | translate }}</h3>
+    </div>
+
+    <div class="box-body">
+        <!-- Filtre competence -->
+        <form class="well well-sm navbar-form" novalidate="" role="search">
+            <div class="input-group add-on" title="{{ 'infobulle.recherche.competence' | translate }}">
+                <input [(ngModel)]="searchText"  class="form-control" id="srch-term" name="srch-term" placeholder="Recherche" type="text">
+                <div class="input-group-btn"> <button class="btn btn-default" type="submit"> <i class="fa fa-search"></i> </button> </div>
+            </div>
+        </form>
+        <div class="plein-page">
+            <table *ngIf="equipe.competenceRequises as result else loading" class="table table-sm">
+                <tbody>
+                    <ng-container *ngTemplateOutlet="arbre; context:{branches: branches, level: 1}"></ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- template Arbre -->
+<ng-template #arbre let-branches="branches" let-level="level">
+        <ng-container *ngFor="let branche of branches;">
+            <ng-container *ngIf="branche.equipe">
+                <tr title="{{ 'infobulle.branche' | translate }}"  *ngIf="level<=3" class='{{cssClassRow(level)}}' >
+                    <th> <i class="fa fa-code-fork "></i> {{branche.libelle}}  </th>
+                    <th></th>
+                </tr>
+                <ng-container *ngFor="let competence of branche.competences;">
+                    <ng-container *ngFor="let competenceRequise of equipe.competenceRequises  | libelleFilter : searchText">
+                        <tr  class="competence_row " *ngIf="competence.id == competenceRequise.competence.id">
+                            <th title="{{ 'infobulle.competence' | translate }}"> <i class="ion ion-ribbon-b"></i> {{competence.libelle}} </th>
+
+                            <td class="text-right">
+                                <div>
+                                    <i title="{{ 'infobulle.note.1' | translate }}"  *ngIf="competenceRequise.note>=1"  class="fa fa-star" (click)= "updateNote(competenceRequise, 1)"></i> <i title="{{ 'infobulle.note.1' | translate }}"   *ngIf="competenceRequise.note<1"  class="fa fa-star-o" (click)= "updateNote(competenceRequise, 1)"></i>
+                                    <i title="{{ 'infobulle.note.2' | translate }}"  *ngIf="competenceRequise.note>=2"  class="fa fa-star" (click)= "updateNote(competenceRequise, 2)"></i> <i title="{{ 'infobulle.note.2' | translate }}"  *ngIf="competenceRequise.note<2"  class="fa fa-star-o" (click)= "updateNote(competenceRequise, 2)"></i>
+                                    <i title="{{ 'infobulle.note.3' | translate }}"  *ngIf="competenceRequise.note>=3"  class="fa fa-star" (click)= "updateNote(competenceRequise, 3)"></i> <i title="{{ 'infobulle.note.3' | translate }}" *ngIf="competenceRequise.note<3"  class="fa fa-star-o" (click)= "updateNote(competenceRequise, 3)"></i>
+                                    <i title="{{ 'infobulle.note.4' | translate }}"  *ngIf="competenceRequise.note>=4"  class="fa fa-star" (click)= "updateNote(competenceRequise, 4)"></i> <i title="{{ 'infobulle.note.4' | translate }}" *ngIf="competenceRequise.note<4"  class="fa fa-star-o" (click)= "updateNote(competenceRequise, 4)"></i>
+                                    <i title="{{ 'infobulle.note.5' | translate }}" *ngIf="competenceRequise.note>=5"  class="fa fa-star" (click)= "updateNote(competenceRequise, 5)"></i> <i title="{{ 'infobulle.note.5' | translate }}" *ngIf="competenceRequise.note<5"  class="fa fa-star-o" (click)= "updateNote(competenceRequise, 5)"></i>
+                                    <button style ="margin-left: 10px;"type="button" class="close" (click)= "delete(competenceRequise)"  type="submit" data-effect="fadeOut" >&times;</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </ng-container>
+                <ng-container  *ngTemplateOutlet="arbre; context:{branches: branche.sousBranches, level: level+1}"></ng-container>
+            </ng-container>
+        </ng-container>
+</ng-template>
+
+
+<ng-template #loading>{{ 'chargement' | translate }}.</ng-template>

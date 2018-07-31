@@ -1,0 +1,13 @@
+<form name="deleteForm" (ngSubmit)="confirmDelete(competence.id)">
+    <div class="modal-header">
+        <h4 class="modal-title" > {{ 'message.confirm.sup' | translate }} </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()"></button>
+    </div>
+    <div class="modal-body">
+        <p> {{ 'message.competence.sup' | translate : {value: competence?.libelle} }} </p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="bsModalRef.hide()">  <span class="fa fa-ban"> </span> {{ 'annule' | translate }} </button>
+        <button type="submit" class="btn btn-danger"> <span class="fa fa-trash-o">  </span> {{ 'valider' | translate }} </button>
+    </div>
+</form>

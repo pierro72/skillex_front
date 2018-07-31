@@ -1,0 +1,66 @@
+<form #editForm="ngForm"  role="form" novalidate (ngSubmit)="save()">
+
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> {{titre}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        
+        <div class="form-group" [hidden]="!id">
+            <label for="id" >{{ 'branche.id' | translate }}</label>
+            <input type="text" class="form-control" id="id" name="id"  ngControl="id" readonly [(ngModel)]="branche.id"/>
+        </div>
+
+        <!-- nom branche -->
+        <div class="form-group">
+            <label class="form-control-label" for="field_nom">{{ 'branche.nom' | translate }}</label>
+            <div class="input-group">
+                <div class="input-group-addon">  <i class="fa fa-share-alt"></i> </div>
+                <input type="text" class="form-control" name="nom" id="field_nom" ngControl="nom" maxlength="100" [(ngModel)]="branche.nom"/>
+                <div [hidden]="!(editForm.controls.nom?.dirty && editForm.controls.nom?.invalid)">
+                    <small class="form-text text-danger" [hidden]="!editForm.controls.nom?.errors?.maxlength" translateValues="{ max: 100 }"> Ce champ ne peux exceder les 100 characteres </small>
+                </div>
+            </div>    
+        </div>
+
+        <!-- Libelle branche -->
+        <div class="form-group">
+            <label class="form-control-label" for="field_libelle"> {{ 'branche.libelle' | translate }} </label>
+            <div class="input-group">
+                <div class="input-group-addon">  <i class="fa fa-tag"></i> </div>
+                <input type="text" class="form-control" name="libelle" id="field_libelle" ngControl="libelle" required maxlength="50" [(ngModel)]="branche.libelle"/>
+                <div [hidden]="!(editForm.controls.libelle?.dirty && editForm.controls.libelle?.invalid)">
+                    <small class="form-text text-danger" [hidden]="!editForm.controls.libelle?.errors?.required" > Ce champ est requis </small>
+                    <small class="form-text text-danger" [hidden]="!editForm.controls.libelle?.errors?.maxlength" translateValues="{ max: 50 }">  Ce champ ne peux exceder les 50 charactères </small>
+                </div>
+            </div>
+        </div>
+        
+         <!-- Description branche -->
+        <div class="form-group">
+            <label class="form-control-label" for="field_description">{{ 'branche.description' | translate }}</label>
+            <div class="input-group">
+                <div class="input-group-addon">  <i class="fa fa-commenting"></i> </div>
+                <input type="text" class="form-control" name="description" id="field_description" ngControl="description" [(ngModel)]="branche.description" />
+            </div>
+        </div>
+    
+    
+        <div class="form-group" [hidden]="branche.brancheParenteId">
+            <div class="input-group">
+                <div class="input-group-addon">  <i class="fa fa-phone"></i> </div>
+                <input type="text" class="form-control" id="brancheParenteId" name="brancheParenteId"  ngControl="brancheParenteId" [(ngModel)]="branche.brancheParenteId"/>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="bsModalRef.hide()"> <span class="fa fa-ban"> </span> {{ 'annule' | translate }}</button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary"> <span class="fa fa-save"> </span>&nbsp;<span> {{ 'valider' | translate }}</span> </button>
+    </div>
+
+</form>
